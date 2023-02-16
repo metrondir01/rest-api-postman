@@ -1,0 +1,2568 @@
+{
+	"info": {
+		"_postman_id": "26b0bb93-9cae-40f3-881d-7d5f734fe14a",
+		"name": "liis_test with schema",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24227161"
+	},
+	"item": [
+		{
+			"name": "get posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/posts",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"id\",jsonData.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    \r",
+							"    pm.expect(pm.response.text()).to.include(pm.environment.get(\"titleorname\"));\r",
+							"     pm.expect(pm.response.text()).to.include(\"content\");\r",
+							"      pm.expect(pm.response.text()).to.include(\"author\");\r",
+							"       pm.expect(pm.response.text()).to.include(\"publication_datetime\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    {{titleorname}}: \"yourpostname6\",\r\n    \"content\": \"yourpostcontent6\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/posts?=",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"posts"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Allow request methods",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"\r",
+							" if (pm.response.status === \"NOT FOUND\")\r",
+							"{pm.test(\"post not faund\", function () {\r",
+							"    pm.response.to.have.status(!404);\r",
+							"});\r",
+							"}\r",
+							"else {\r",
+							"\r",
+							"let header = pm.response.headers.get(\"Allow\");\r",
+							"let arr = header.split(', ');\r",
+							"const arrToCompareTo = [\"GET\", \"PUT\", \"DELETE\", \"OPTIONS\", \"HEAD\"];\r",
+							"\r",
+							"let flag = true;\r",
+							"arrToCompareTo.forEach(s =>{\r",
+							"    if(!arr.includes(s)){\r",
+							"       flag = false; \r",
+							"    }} )\r",
+							"\r",
+							"if(arr.length > arrToCompareTo.length){\r",
+							"    flag = false; \r",
+							"} \r",
+							"\r",
+							"pm.test(\"all headers are matched\", function() {\r",
+							"    pm.expect(flag).to.equals(true);\r",
+							"});\r",
+							"}\r",
+							"}\r",
+							"catch(e){\r",
+							"    console.log(e)\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "OPTIONS",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/post/{{id}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post post №2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"id2\",jsonData.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(pm.environment.get(\"titleorname\"));\r",
+							"     pm.expect(pm.response.text()).to.include(\"content\");\r",
+							"      pm.expect(pm.response.text()).to.include(\"author\");\r",
+							"       pm.expect(pm.response.text()).to.include(\"publication_datetime\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    {{titleorname}}: \"yourpostname7\",\r\n    \"content\": \"yourpostcontent7\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/posts",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"\r",
+							" if (pm.response.status === \"NOT FOUND\")\r",
+							"{pm.test(\"post not faund\", function () {\r",
+							"    pm.response.to.have.status(!404);\r",
+							"});\r",
+							"}\r",
+							"else {\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"\r",
+							"var ton =  pm.environment.get(\"titleorname\");\r",
+							"ton = ton.replaceAll('\"', \"\");\r",
+							"\r",
+							"\r",
+							"var schema = {\r",
+							"    \"type\":\"object\",\r",
+							"    \"properties\":{\r",
+							"        \"author\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        },\r",
+							"        \"content\":{\r",
+							"            \"pattern\":\"yourpostcontent6\",\r",
+							"            \"type\":\"string\"\r",
+							"        },\r",
+							"        \"id\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        },\r",
+							"        \"publication_datetime\":{\r",
+							"            \"type\":\"string\"\r",
+							"        },\r",
+							"        [ton]:{\r",
+							"            \"type\":\"string\",\r",
+							"            \"pattern\":\"yourpostname6\"\r",
+							"        }\r",
+							"    },\r",
+							"    \"required\":[\"author\", \"content\", \"id\", \"publication_datetime\", [ton]]\r",
+							"}\r",
+							"\r",
+							"tv4.setErrorReporter(function (error){\r",
+							"    return \"Error is here: \" + error.dataPath + \"in schema\"\r",
+							"    + error.schemaPath; \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validation\", function(){\r",
+							"    var res = tv4.validateMultiple(data, schema, false, true);\r",
+							"    if(!res.valid){\r",
+							"        for(const error of res.errors){\r",
+							"            console.log(\"Validation failed\", error)\r",
+							"        }\r",
+							"    }\r",
+							"    pm.expect(res.valid).to.be.true;\r",
+							"});\r",
+							"}\r",
+							"}\r",
+							"catch(e){\r",
+							"    console.log(e)\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/post/{{id}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(pm.environment.get(\"titleorname\"));\r",
+							"    pm.expect(pm.response.text()).to.include(\"yourpostname6\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"yourpostcontent6\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"yourpostname7\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"yourpostcontent7\");\r",
+							"     pm.expect(pm.response.text()).to.include(\"content\");\r",
+							"      pm.expect(pm.response.text()).to.include(\"author\");\r",
+							"       pm.expect(pm.response.text()).to.include(\"publication_datetime\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"       }); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/posts",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"updated\");\r",
+							"     pm.expect(pm.response.text()).to.include(\"success\");\r",
+							"     });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    {{titleorname}}: \"changed name post\",\r\n    \"content\": \"changed text post\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/post/{{id}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check after change",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"\r",
+							" if (pm.response.status === \"NOT FOUND\")\r",
+							"{pm.test(\"post not faund\", function () {\r",
+							"    pm.response.to.have.status(!404);\r",
+							"});\r",
+							"}\r",
+							"else {\r",
+							"\r",
+							"var ton =  pm.environment.get(\"titleorname\");\r",
+							"ton = ton.replaceAll('\"', \"\");\r",
+							"\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"\r",
+							"var schema = {\r",
+							"    \"type\":\"object\",\r",
+							"    \"properties\":{\r",
+							"        \"author\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        },\r",
+							"        \"content\":{\r",
+							"            \"type\":\"string\",\r",
+							"            \"pattern\":\"changed text post\"\r",
+							"        },\r",
+							"        \"id\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        },\r",
+							"        \"publication_datetime\":{\r",
+							"            \"type\":\"string\"\r",
+							"        },\r",
+							"        [ton]:{\r",
+							"            \"type\":\"string\",\r",
+							"            \"pattern\":\"changed name post\"\r",
+							"        }\r",
+							"    },\r",
+							"    \"required\":[\"author\", \"content\", \"id\", \"publication_datetime\", [ton]]\r",
+							"}\r",
+							"\r",
+							"tv4.setErrorReporter(function (error){\r",
+							"    return \"Error is here: \" + error.dataPath + \"in schema\"\r",
+							"    + error.schemaPath; \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validation\", function(){\r",
+							"    var res = tv4.validateMultiple(data, schema, false, true);\r",
+							"    if(!res.valid){\r",
+							"        for(const error of res.errors){\r",
+							"            console.log(\"Validation failed\", error)\r",
+							"        }\r",
+							"    }\r",
+							"    pm.expect(res.valid).to.be.true;\r",
+							"});\r",
+							"\r",
+							"}\r",
+							"}\r",
+							"catch(e){\r",
+							"    console.log(e)\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/post/{{id}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post comment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"idcomm\",jsonData.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+							"     pm.expect(pm.response.text()).to.include(pm.environment.get(\"textorcontent\"));\r",
+							"      pm.expect(pm.response.text()).to.include(\"author\");\r",
+							"       pm.expect(pm.response.text()).to.include(\"publication_datetime\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"post\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"yourcommenttitle\",\r\n    {{textorcontent}}: \"yourcommenttext\",\r\n    \"post\": {{id}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/comments",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Allow request methods",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"\r",
+							" if (pm.response.status === \"NOT FOUND\")\r",
+							"{pm.test(\"post not faund\", function () {\r",
+							"    pm.response.to.have.status(!404);\r",
+							"});\r",
+							"}\r",
+							"else {\r",
+							"\r",
+							"let header = pm.response.headers.get(\"Allow\");\r",
+							"let arr = header.split(', ');\r",
+							"const arrToCompareTo = [\"GET\", \"PUT\", \"DELETE\", \"OPTIONS\", \"HEAD\"];\r",
+							"\r",
+							"let flag = true;\r",
+							"arrToCompareTo.forEach(s =>{\r",
+							"    if(!arr.includes(s)){\r",
+							"       flag = false; \r",
+							"    }} )\r",
+							"\r",
+							"if(arr.length > arrToCompareTo.length){\r",
+							"    flag = false; \r",
+							"} \r",
+							"\r",
+							"pm.test(\"all headers are matched\", function() {\r",
+							"    pm.expect(flag).to.equals(true);\r",
+							"});\r",
+							"\r",
+							"}\r",
+							"}\r",
+							"catch(e){\r",
+							"    console.log(e)\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "OPTIONS",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/comment/{{idcomm}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"comment",
+						"{{idcomm}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post comment №2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"idcomm2\",jsonData.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+							"     pm.expect(pm.response.text()).to.include(pm.environment.get(\"textorcontent\"));\r",
+							"      pm.expect(pm.response.text()).to.include(\"author\");\r",
+							"       pm.expect(pm.response.text()).to.include(\"publication_datetime\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"post\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"yourcommenttitleTT\",\r\n    {{textorcontent}}: \"yourcommenttextTT\",\r\n    \"post\": {{id2}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/comments",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get comment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"\r",
+							"if (pm.response.status === \"NOT FOUND\")\r",
+							"{pm.test(\"post not faund\", function () {\r",
+							"    pm.response.to.have.status(!404);\r",
+							"});\r",
+							"}\r",
+							"else {\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var ton =  pm.environment.get(\"textorcontent\");\r",
+							"ton = ton.replaceAll('\"', \"\");\r",
+							"\r",
+							"\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"\r",
+							"var schema = {\r",
+							"    \"type\":\"object\",\r",
+							"    \"properties\":{\r",
+							"        \"author\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        },\r",
+							"        [ton]:{\r",
+							"            \"type\":\"string\",\r",
+							"            \"pattern\":\"yourcommenttext\"\r",
+							"        },\r",
+							"        \"id\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        },\r",
+							"        \"publication_datetime\":{\r",
+							"            \"type\":\"string\"\r",
+							"        },\r",
+							"        \"title\":{\r",
+							"            \"type\":\"string\",\r",
+							"            \"pattern\":\"yourcommenttitle\"\r",
+							"        },\r",
+							"        \"post\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        }\r",
+							"    },\r",
+							"    \"required\":[\"author\", [ton], \"id\", \"publication_datetime\", \"title\", \"post\"]\r",
+							"}\r",
+							"\r",
+							"tv4.setErrorReporter(function (error){\r",
+							"    return \"Error is here: \" + error.dataPath + \"in schema\"\r",
+							"    + error.schemaPath; \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validation\", function(){\r",
+							"    var res = tv4.validateMultiple(data, schema, false, true);\r",
+							"    if(!res.valid){\r",
+							"        for(const error of res.errors){\r",
+							"            console.log(\"Validation failed\", error)\r",
+							"        }\r",
+							"    }\r",
+							"    pm.expect(res.valid).to.be.true;\r",
+							"});\r",
+							"\r",
+							"}\r",
+							"}\r",
+							"catch(e){\r",
+							"    console.log(e)\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/comment/{{idcomm}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"comment",
+						"{{idcomm}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get comments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"yourcommenttitle\");\r",
+							"     pm.expect(pm.response.text()).to.include(\"yourcommenttext\");\r",
+							"     pm.expect(pm.response.text()).to.include(\"title\");\r",
+							"     pm.expect(pm.response.text()).to.include(pm.environment.get(\"textorcontent\"));\r",
+							"      pm.expect(pm.response.text()).to.include(\"author\");\r",
+							"       pm.expect(pm.response.text()).to.include(\"publication_datetime\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"post\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/comments",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put comment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"updated\");\r",
+							"     pm.expect(pm.response.text()).to.include(\"success\");\r",
+							"     });\r",
+							"\r",
+							"   \r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"new info\",\r\n    {{textorcontent}}: \"picture\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/comment/{{idcomm}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"comment",
+						"{{idcomm}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check after change",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"\r",
+							"if (pm.response.status === \"NOT FOUND\")\r",
+							"{pm.test(\"post not faund\", function () {\r",
+							"    pm.response.to.have.status(!404);\r",
+							"});\r",
+							"}\r",
+							"else {\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var ton =  pm.environment.get(\"textorcontent\");\r",
+							"ton = ton.replaceAll('\"', \"\");\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"\r",
+							"var schema = {\r",
+							"    \"type\":\"object\",\r",
+							"    \"properties\":{\r",
+							"        \"author\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        },\r",
+							"        [ton]:{\r",
+							"            \"type\":\"string\",\r",
+							"            \"pattern\":\"picture\"\r",
+							"        },\r",
+							"        \"id\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        },\r",
+							"        \"publication_datetime\":{\r",
+							"            \"type\":\"string\"\r",
+							"        },\r",
+							"        \"title\":{\r",
+							"            \"type\":\"string\",\r",
+							"            \"pattern\":\"new info\"\r",
+							"        },\r",
+							"        \"post\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        }\r",
+							"    },\r",
+							"    \"required\":[\"author\", [ton], \"id\", \"publication_datetime\", \"title\", \"post\"]\r",
+							"}\r",
+							"\r",
+							"tv4.setErrorReporter(function (error){\r",
+							"    return \"Error is here: \" + error.dataPath + \"in schema\"\r",
+							"    + error.schemaPath; \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validation\", function(){\r",
+							"    var res = tv4.validateMultiple(data, schema, false, true);\r",
+							"    if(!res.valid){\r",
+							"        for(const error of res.errors){\r",
+							"            console.log(\"Validation failed\", error)\r",
+							"        }\r",
+							"    }\r",
+							"    pm.expect(res.valid).to.be.true;\r",
+							"});\r",
+							"\r",
+							"}\r",
+							"}\r",
+							"catch(e){\r",
+							"    console.log(e)\r",
+							"}\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/comment/{{idcomm}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"comment",
+						"{{idcomm}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "del comment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"no content\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/comment/{{idcomm}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"comment",
+						"{{idcomm}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "del comment №2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"no content\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/comment/{{idcomm2}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"comment",
+						"{{idcomm2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check after del",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"post not faund\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/comment/{{idcomm}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"comment",
+						"{{idcomm}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check after del №2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"post not faund\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/comment/{{idcomm2}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"comment",
+						"{{idcomm2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "del post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"no content\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/post/{{id}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "del post №2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"no content\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/post/{{id2}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check after del",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"post not faund\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/post/{{id}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check after del №2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"post not faund\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/post/{{id2}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sign in",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"iduser\",jsonData.id);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"\r",
+							"var schema = {\r",
+							"    \"type\":\"object\",\r",
+							"    \"properties\":{\r",
+							"        \"username\":{\r",
+							"            \"type\":\"string\"\r",
+							"        },\r",
+							"        \"password\":{\r",
+							"            \"type\":\"string\"\r",
+							"        },\r",
+							"        \"email\":{\r",
+							"            \"tipe\":\"string\"\r",
+							"        },\r",
+							"        \"id\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        }\r",
+							"        \r",
+							"    },\r",
+							"    \"required\":[\"username\", \"password\", \"id\", \"email\"]\r",
+							"}\r",
+							"\r",
+							"tv4.setErrorReporter(function (error){\r",
+							"    return \"Error is here: \" + error.dataPath + \"in schema\"\r",
+							"    + error.schemaPath; \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validation\", function(){\r",
+							"    var res = tv4.validateMultiple(data, schema, false, true);\r",
+							"    if(!res.valid){\r",
+							"        for(const error of res.errors){\r",
+							"            console.log(\"Validation failed\", error)\r",
+							"        }\r",
+							"    }\r",
+							"    pm.expect(res.valid).to.be.true;\r",
+							"});\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"username\",jsonData.username);\r",
+							"\r",
+							"}\r",
+							"catch(e){\r",
+							"    console.log(e)\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{$randomUserName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"yourpassword\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/sign-in",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"sign-in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "grant admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var ver = pm.environment.get(\"version\");\r",
+							"if(ver === \"v1\"){\r",
+							"    throw new Error('other requests will work in v2')\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\": {{iduser}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/make_admin",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"make_admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post post №3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"id_for_new_admin\",jsonData.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    \r",
+							"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+							"     pm.expect(pm.response.text()).to.include(\"content\");\r",
+							"      pm.expect(pm.response.text()).to.include(\"author\");\r",
+							"       pm.expect(pm.response.text()).to.include(\"publication_datetime\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    {{titleorname}}: \"yourpostname6\",\r\n    \"content\": \"yourpostcontent6\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/v2/api/tohirkasim@mail.ru/posts",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"v2",
+						"api",
+						"tohirkasim@mail.ru",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post comment №3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"idcomm3\",jsonData.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"title\");\r",
+							"     pm.expect(pm.response.text()).to.include(pm.environment.get(\"textorcontent\"));\r",
+							"      pm.expect(pm.response.text()).to.include(\"author\");\r",
+							"       pm.expect(pm.response.text()).to.include(\"publication_datetime\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"post\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"yourcommenttitle\",\r\n    {{textorcontent}}: \"yourcommenttext\",\r\n    \"post\": {{id}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/{{version}}/api/tohirkasim@mail.ru/comments",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"{{version}}",
+						"api",
+						"tohirkasim@mail.ru",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get posts pagination",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/v2/api/tohirkasim@mail.ru/posts?page=1",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"v2",
+						"api",
+						"tohirkasim@mail.ru",
+						"posts"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get comments pagination",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/v2/api/tohirkasim@mail.ru/comments?page=1",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"v2",
+						"api",
+						"tohirkasim@mail.ru",
+						"comments"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put change by new_admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"updated\");\r",
+							"     pm.expect(pm.response.text()).to.include(\"success\");\r",
+							"     });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"changed by new admin\",\r\n    \"content\": \"changed by new admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/v2/api/tohirkasim@mail.ru/post/{{id_for_new_admin}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"v2",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id_for_new_admin}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get changes after new_admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"\r",
+							"if (pm.response.status === \"NOT FOUND\")\r",
+							"{pm.test(\"post not faund\", function () {\r",
+							"    pm.response.to.have.status(!404);\r",
+							"});\r",
+							"}\r",
+							"else {\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"\r",
+							"var ton =  pm.environment.get(\"titleorname\");\r",
+							"ton = ton.replaceAll('\"', \"\");\r",
+							"\r",
+							"var schema = {\r",
+							"    \"type\":\"object\",\r",
+							"    \"properties\":{\r",
+							"        \"author\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        },\r",
+							"        \"content\":{\r",
+							"            \"pattern\":\"changed by new admin\",\r",
+							"            \"type\":\"string\"\r",
+							"        },\r",
+							"        \"id\":{\r",
+							"            \"type\":\"integer\"\r",
+							"        },\r",
+							"        \"publication_datetime\":{\r",
+							"            \"type\":\"string\"\r",
+							"        },\r",
+							"        \"name\":{\r",
+							"            \"type\":\"string\",\r",
+							"            \"pattern\":\"changed by new admin\"\r",
+							"        }\r",
+							"    },\r",
+							"    \"required\":[\"author\", \"content\", \"id\", \"publication_datetime\", \"name\"]\r",
+							"}\r",
+							"\r",
+							"tv4.setErrorReporter(function (error){\r",
+							"    return \"Error is here: \" + error.dataPath + \"in schema\"\r",
+							"    + error.schemaPath; \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validation\", function(){\r",
+							"    var res = tv4.validateMultiple(data, schema, false, true);\r",
+							"    if(!res.valid){\r",
+							"        for(const error of res.errors){\r",
+							"            console.log(\"Validation failed\", error)\r",
+							"        }\r",
+							"    }\r",
+							"    pm.expect(res.valid).to.be.true;\r",
+							"});\r",
+							"\r",
+							"}\r",
+							"}\r",
+							"catch(e){\r",
+							"    console.log(e)\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/v2/api/tohirkasim@mail.ru/post/{{id2}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"v2",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "del post by new admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"no content\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/v2/api/tohirkasim@mail.ru/post/{{id_for_new_admin}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"v2",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id_for_new_admin}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check after del by new_admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"post not faund\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/v2/api/tohirkasim@mail.ru/post/{{id_for_new_admin}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"v2",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id_for_new_admin}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "final cleaning",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"post already deleted \", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hr.recruit.liis.su/qa0/v2/api/tohirkasim@mail.ru/post/{{id_for_new_admin}}",
+					"protocol": "https",
+					"host": [
+						"hr",
+						"recruit",
+						"liis",
+						"su"
+					],
+					"path": [
+						"qa0",
+						"v2",
+						"api",
+						"tohirkasim@mail.ru",
+						"post",
+						"{{id_for_new_admin}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"value": "",
+			"type": "string"
+		}
+	]
+}
